@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  background: #eef1f8;
+}
+
+/* Fixed pixel canvas so on-screen preview and the exported PDF always match */
+.cert-canvas {
+  width: 1200px;
+  height: 848px;
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-brand-blue focus:ring-1 focus:ring-brand-blue;
+  }
+  .btn-primary {
+    @apply w-full rounded-md bg-brand-blue px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-navy disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-secondary {
+    @apply mt-2 w-full rounded-md border border-brand-blue px-4 py-2 text-sm font-semibold text-brand-blue transition hover:bg-brand-blue/5 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+}
