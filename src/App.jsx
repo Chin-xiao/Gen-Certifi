@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 
 import { pdf } from "@react-pdf/renderer";
 import { CertificatePDF, CertificatesPDF } from "./components/CertificatePDF.jsx";
-import logo from "./assets/CheckinMelogo (2).png";
+import logo from "./assets/CheckinMe_logo.png";
 import background from "./assets/background.png";
 import signature1 from "./assets/signatureceo.png";
 import signature2 from "./assets/signatureproject.png";
