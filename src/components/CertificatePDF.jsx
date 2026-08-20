@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     fontFamily: SANS_FONT_BOLD,
     fontSize: s(30),
     color: "#4076F0",
+    
   },
   orgTag: {
     fontFamily: SANS_FONT_BOLD,
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     color: "#333333",
     // FIX: preview uses `mt-1` (4px) — this was s(6), 2px too much gap
     // between the wordmark row and the tagline under the logo.
-    marginTop: s(4),
+    marginTop: s(28),
   },
   title: {
     fontFamily: SERIF_FONT,
@@ -169,6 +170,7 @@ const styles = StyleSheet.create({
     // FIX: preview uses `mt-7` (28px) — this was s(12), name sat too close
     // to the "presented to" label compared to the live preview.
     marginTop: s(28),
+    marginBottom: s(8),
     textAlign: "center",
     lineHeight: 1,
     maxWidth: s(820),
