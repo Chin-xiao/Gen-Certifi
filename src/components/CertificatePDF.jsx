@@ -125,7 +125,9 @@ const styles = StyleSheet.create({
   orgTag: {
     fontFamily: SANS_FONT_BOLD,
     fontSize: s(10),
-    letterSpacing: 1,
+    // FIX: preview uses tracking-[.12em] (0.12em of 10px = 1.2px) — was
+    // hardcoded to 1, now scaled correctly like every other measurement.
+    letterSpacing: s(10 * 0.12),
     color: "#333333",
     // FIX: preview uses `mt-1` (4px) — this was s(6), 2px too much gap
     // between the wordmark row and the tagline under the logo.
@@ -164,10 +166,9 @@ const styles = StyleSheet.create({
     letterSpacing: s(1.55),
     color: "#2D55BB",
     textTransform: "uppercase",
-    marginTop: s(12),
-    // no marginBottom here — the preview's name <div> has none either
-    // (only mt-6/mt-2.5 → marginTop). An extra marginBottom here was
-    // pushing the body text further down in the PDF than in the preview.
+    // FIX: preview uses `mt-7` (28px) — this was s(12), name sat too close
+    // to the "presented to" label compared to the live preview.
+    marginTop: s(28),
     textAlign: "center",
     lineHeight: 1,
     maxWidth: s(820),
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     fontFamily: KHMER_FONT,
     fontSize: s(58),
     color: "#2D55BB",
-    marginTop: s(12),
+    marginTop: s(28),
     marginBottom: s(8),
     textAlign: "center",
     lineHeight: 1.35,
@@ -195,7 +196,8 @@ const styles = StyleSheet.create({
     fontSize: s(24),
     lineHeight: 1.8,
     color: "#000000",
-    marginTop: s(24),
+    // FIX: preview uses `mt-7` (28px) — this was s(24).
+    marginTop: s(28),
     textAlign: "center",
     maxWidth: s(760),
   },
@@ -231,7 +233,10 @@ const styles = StyleSheet.create({
   sigLine: {
     marginTop: s(6),
     width: "100%",
-    borderTopWidth: 2.5,
+    // FIX: was a raw unscaled `2.5` — every other border/spacing value goes
+    // through s(), so this was rendering visually thinner relative to the
+    // rest of the page than the preview's `border-t-[2.5px]`.
+    borderTopWidth: s(2.5),
     borderTopColor: "#2D55BB",
   },
   sigName: {
@@ -257,15 +262,23 @@ const styles = StyleSheet.create({
   badgeWrap: {
     alignItems: "center",
     justifyContent: "center",
+    // FIX: preview has `mb-6 pb-14` (24px margin + 56px padding) — the
+    // marginBottom was missing entirely, so the badge sat too low/cramped
+    // relative to the signature baseline compared to the preview.
+    marginBottom: s(24),
     paddingBottom: s(56),
   },
   badgeImg: {
-    maxHeight: s(48),
-    maxWidth: s(64),
+    // FIX: preview caps the badge at `max-h-10 max-w-12` (40px / 48px).
+    // This was s(48)/s(64) — noticeably oversized vs. the live preview.
+    maxHeight: s(40),
+    maxWidth: s(48),
     objectFit: "contain",
   },
   badgeText: {
-    fontFamily: SANS_FONT_BOLD,
+    // FIX: preview's fallback badge text uses `font-header` (serif/Times),
+    // not the sans font — was SANS_FONT_BOLD, wrong typeface entirely.
+    fontFamily: SERIF_FONT_BOLD,
     fontSize: s(22),
     lineHeight: 0.85,
     textAlign: "center",
