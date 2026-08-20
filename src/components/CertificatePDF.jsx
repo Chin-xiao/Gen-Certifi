@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     color: "#2D55BB",
     textTransform: "uppercase",
     marginTop: s(10),
-    marginBottom: s(8),
+    marginBottom: s(15),
     // no marginBottom here — the preview's name <div> has none either
     // (only mt-6/mt-2.5 → marginTop). An extra marginBottom here was
     // pushing the body text further down in the PDF than in the preview.
