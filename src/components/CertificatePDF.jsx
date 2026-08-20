@@ -4,73 +4,67 @@ import { Document, Page, View, Text, Image, Font, StyleSheet } from "@react-pdf/
 // FONTS
 // ---------------------------------------------------------------------------
 // @react-pdf/renderer can't read fonts from the browser/OS or from a Google
-// Fonts <link> — it needs a direct .ttf/.woff file it can embed. The most
-// reliable way (won't break if a gstatic URL ever changes) is to download the
-// files once and bundle them, so your Vite/CRA build resolves them to a URL
-// automatically:
+// Fonts <link> — it needs a direct .ttf/.woff file it can embed.
 //
-//   src/assets/fonts/EBGaramond-Regular.ttf
-//   src/assets/fonts/EBGaramond-Bold.ttf
-//   src/assets/fonts/Battambang-Regular.ttf   (for Khmer-script names)
-//   src/assets/fonts/Battambang-Bold.ttf
-//   src/assets/fonts/Inter-Regular.ttf
-//   src/assets/fonts/Inter-Bold.ttf
+// Currently registered from real embedded files: Battambang (Khmer) and
+// Inter (sans, used for orgName/orgTag/badge text).
 //
-// Get them from https://fonts.google.com/specimen/EB+Garamond (and
-// .../Battambang, .../Inter) → "Download family" → unzip → grab the
-// -Regular and -Bold .ttf files (skip the variable-font ones, react-pdf
-// doesn't support those).
-//
-// Then uncomment these imports and the Font.register calls below.
+// English/Latin serif text (title, subtitle, name, body, signatures) still
+// uses react-pdf's BUILT-IN "Times-Roman" / "Times-Bold" — no file needed,
+// works with zero setup. Note: react-pdf's built-in base-14 fonts have no
+// real embedded metrics, so their line-height/leading is hardcoded and can
+// make marginTop/marginBottom look like they're not applying on that text.
+// If you want the real Times New Roman file registered as an embedded font
+// (fixes that margin quirk, and is a closer visual match) — you'll need to
+// source the .ttf yourself since Google doesn't host it (Microsoft/Monotype
+// trademark). See the earlier conversation for how to add it.
 
-// import ebGaramondRegular from "./assets/fonts/EBGaramond-Regular.ttf";
-// import ebGaramondBold from "./assets/fonts/EBGaramond-Bold.ttf";
-// import battambangRegular from "./assets/fonts/Battambang-Regular.ttf";
-// import battambangBold from "./assets/fonts/Battambang-Bold.ttf";
-// import interRegular from "./assets/fonts/Inter-Regular.ttf";
-// import interBold from "./assets/fonts/Inter-Bold.ttf";
+import battambangRegular from "../assets/fonts/Battambang-Regular.ttf";
+import battambangBold from "../assets/fonts/Battambang-Bold.ttf";
+// Google's current Inter download splits by optical size instead of giving
+// one plain Inter-Regular/Bold.ttf. Any of Inter_18pt / Inter_24pt /
+// Inter_28pt look essentially identical at these font sizes — using 18pt.
+import interRegular from "../assets/fonts/Inter_18pt-Regular.ttf";
+import interBold from "../assets/fonts/Inter_18pt-Bold.ttf";
 
-// Font.register({
-//   family: "EBGaramond",
-//   fonts: [
-//     { src: ebGaramondRegular, fontWeight: 400 },
-//     { src: ebGaramondBold, fontWeight: 700 },
-//   ],
-// });
+Font.register({
+  family: "Battambang",
+  fonts: [{ src: battambangRegular, fontWeight: 400 }],
+});
+Font.register({
+  family: "BattambangBold",
+  fonts: [{ src: battambangBold, fontWeight: 700 }],
+});
 
-// Font.register({
-//   family: "Battambang",
-//   fonts: [
-//     { src: battambangRegular, fontWeight: 400 },
-//     { src: battambangBold, fontWeight: 700 },
-//   ],
-// });
+Font.register({
+  family: "Inter",
+  fonts: [{ src: interRegular, fontWeight: 400 }],
+});
+Font.register({
+  family: "InterBold",
+  fonts: [{ src: interBold, fontWeight: 700 }],
+});
 
-// Font.register({
-//   family: "Inter",
-//   fonts: [
-//     { src: interRegular, fontWeight: 400 },
-//     { src: interBold, fontWeight: 700 },
-//   ],
-// });
+// react-pdf auto-hyphenates long words by default (e.g. "commitment" was
+// splitting into "com-" / "mitment" across lines) — something the browser
+// preview never does, since it has no CSS `hyphens: auto` set. This turns
+// hyphenation off so react-pdf only breaks between whole words, matching
+// how the preview wraps text.
+Font.registerHyphenationCallback((word) => [word]);
 
-// Until you add the files above, react-pdf falls back to its built-in
-// Helvetica/Times-Roman — the PDF will still generate, just with a
-// slightly different look (and no Khmer glyph support) until you register
-// real fonts.
 const SERIF_FONT = "Times-Roman";
 const SERIF_FONT_BOLD = "Times-Bold";
-const KHMER_FONT = "Times-Roman"; // swap to "Battambang" once registered
-const SANS_FONT = "Helvetica";
-const SANS_FONT_BOLD = "Helvetica-Bold";
+const KHMER_FONT = "Battambang";
+const KHMER_FONT_BOLD = "BattambangBold";
+const SANS_FONT = "Inter";
+const SANS_FONT_BOLD = "InterBold";
 
 // ---------------------------------------------------------------------------
 // LAYOUT
 // ---------------------------------------------------------------------------
-// The on-screen preview is designed at ~1000px card width, then jsPDF used
-// to stretch that capture onto a 1123x794pt page. To keep every size/spacing
-// number visually identical, we scale each "design px" value by the same
-// ratio (1123/1000) instead of re-eyeballing everything from scratch.
+// The on-screen preview is designed at ~1000px card width, scaled up to a
+// 1123x794pt page. Every size/spacing number below is the preview's design-px
+// value run through s() so it stays visually identical to App.jsx.
 const PAGE_WIDTH = 1123;
 const PAGE_HEIGHT = 794;
 const s = (px) => px * (PAGE_WIDTH / 1000);
@@ -105,21 +99,22 @@ const styles = StyleSheet.create({
     position: "relative",
     flexDirection: "column",
     alignItems: "center",
-    paddingHorizontal: s(80), // ~8% of the 1000px design width
+    paddingHorizontal: s(80),
     paddingTop: s(40),
     paddingBottom: s(34),
     height: "100%",
   },
   logoRow: {
+    height: s(36),
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
   logoImg: {
-    width: s(320),
+    width: s(290),
     height: s(36),
     marginRight: s(8),
-    marginBottom: s(6),
+    marginBottom: s(32),
     objectFit: "contain",
   },
   orgName: {
@@ -132,11 +127,15 @@ const styles = StyleSheet.create({
     fontSize: s(10),
     letterSpacing: 1,
     color: "#333333",
-    marginTop: s(6),
+    // FIX: preview uses `mt-1` (4px) — this was s(6), 2px too much gap
+    // between the wordmark row and the tagline under the logo.
+    marginTop: s(4),
   },
   title: {
     fontFamily: SERIF_FONT,
     fontSize: s(68),
+    lineHeight: 1.15,
+    letterSpacing: s(1.7),
     color: "#2D55BB",
     marginTop: s(10),
     textAlign: "center",
@@ -144,7 +143,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: SERIF_FONT_BOLD,
     fontSize: s(30),
-    letterSpacing: s(9),
+    letterSpacing: s(6),
     color: "#2D55BB",
     marginTop: s(8),
     textAlign: "center",
@@ -156,14 +155,39 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     color: "#000000",
     marginTop: s(34),
+    marginBottom: s(6),
     textAlign: "center",
   },
   name: {
-    fontSize: s(58),
+    fontFamily: SERIF_FONT,
+    fontSize: s(62),
+    letterSpacing: s(1.55),
     color: "#2D55BB",
     textTransform: "uppercase",
     marginTop: s(10),
+    // no marginBottom here — the preview's name <div> has none either
+    // (only mt-6/mt-2.5 → marginTop). An extra marginBottom here was
+    // pushing the body text further down in the PDF than in the preview.
     textAlign: "center",
+    lineHeight: 1,
+    maxWidth: s(820),
+  },
+  // Separate style for Khmer recipient names. Can't just reuse `name`:
+  // - letterSpacing breaks Khmer's combining-mark shaping (base consonant +
+  //   stacked/vowel signs), producing the uneven gaps between syllables.
+  // - lineHeight: 1 clips Khmer vowel signs that sit above the base line
+  //   (visible as a cropped diacritic at the top of the name).
+  // - Battambang's glyphs run taller than Times-Roman at the same pt size,
+  //   so a touch of marginBottom keeps the gap before the body text
+  //   visually consistent with the Latin-name version.
+  nameKhmer: {
+    fontFamily: KHMER_FONT,
+    fontSize: s(58),
+    color: "#2D55BB",
+    marginTop: s(10),
+    marginBottom: s(8),
+    textAlign: "center",
+    lineHeight: 1.35,
     maxWidth: s(820),
   },
   body: {
@@ -195,6 +219,15 @@ const styles = StyleSheet.create({
     objectFit: "contain",
     marginBottom: s(2),
   },
+  sigScript: {
+    fontFamily: SERIF_FONT,
+    fontStyle: "italic",
+    fontSize: s(38),
+    color: "#7ea1dd",
+    opacity: 0.85,
+    height: s(40),
+    textAlign: "center",
+  },
   sigLine: {
     marginTop: s(6),
     width: "100%",
@@ -204,6 +237,10 @@ const styles = StyleSheet.create({
   sigName: {
     fontFamily: SERIF_FONT_BOLD,
     fontSize: s(17),
+    // FIX: preview has `tracking-wide` (0.025em) on the signer name —
+    // wasn't set in the PDF at all, so names rendered slightly tighter
+    // than the preview.
+    letterSpacing: s(17 * 0.025),
     textTransform: "uppercase",
     color: "#000000",
     marginTop: s(6),
@@ -230,17 +267,31 @@ const styles = StyleSheet.create({
   badgeText: {
     fontFamily: SANS_FONT_BOLD,
     fontSize: s(22),
+    lineHeight: 0.85,
     textAlign: "center",
   },
 });
 
 function Signature({ image, name, title, organization }) {
-  const nameFont = hasKhmer(name) ? KHMER_FONT : SERIF_FONT_BOLD;
+  const isKhmerName = hasKhmer(name);
   return (
     <View style={styles.sigCol}>
-      {image && <Image src={image} style={styles.sigImg} />}
+      {image ? (
+        <Image src={image} style={styles.sigImg} />
+      ) : (
+        <Text style={styles.sigScript}>{name}</Text>
+      )}
       <View style={styles.sigLine} />
-      <Text style={[styles.sigName, { fontFamily: nameFont }]}>{name}</Text>
+      <Text
+        style={[
+          styles.sigName,
+          isKhmerName
+            ? { fontFamily: KHMER_FONT_BOLD, letterSpacing: 0, lineHeight: 1.35 }
+            : null,
+        ]}
+      >
+        {name}
+      </Text>
       <Text style={styles.sigMeta}>
         {title}
         {"\n"}
@@ -267,7 +318,7 @@ function BodyText({ template, name }) {
 }
 
 function CertificatePage({ form, name, images }) {
-  const nameFont = hasKhmer(name) ? KHMER_FONT : SERIF_FONT;
+  const isKhmerName = hasKhmer(name);
 
   return (
     <Page size={{ width: PAGE_WIDTH, height: PAGE_HEIGHT }} style={styles.page}>
@@ -286,7 +337,7 @@ function CertificatePage({ form, name, images }) {
         <Text style={styles.subtitle}>{form.certSubtitle}</Text>
 
         <Text style={styles.presentedLabel}>{form.presentedLabel}</Text>
-        <Text style={[styles.name, { fontFamily: nameFont }]}>{name}</Text>
+        <Text style={isKhmerName ? styles.nameKhmer : styles.name}>{name}</Text>
 
         <BodyText template={form.bodyText} name={name} />
 
@@ -305,7 +356,7 @@ function CertificatePage({ form, name, images }) {
               <Text style={styles.badgeText}>
                 {form.badgeLine1}
                 {"\n"}
-                {form.badgeLine2}
+                <Text style={{ color: "#e24a26" }}>{form.badgeLine2}</Text>
               </Text>
             )}
           </View>

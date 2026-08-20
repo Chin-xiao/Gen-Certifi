@@ -8,7 +8,7 @@ import signature1 from "./assets/signatureceo.png";
 import signature2 from "./assets/signatureproject.png";
 import badge from "./assets/hrgo.png";
 
-const initialRecipients = [""];
+const initialRecipients = [];
 
 export default function App() {
   const [recipients, setRecipients] = useState(initialRecipients);
@@ -488,7 +488,7 @@ export default function App() {
 
             <div className="mt-1.5 text-[11px] text-[#4a4a5e]">
               {recipients.length}{" "}
-              {recipients.length === 1
+              {recipients.length === 0
                 ? "recipient"
                 : "recipients"}
             </div>
@@ -617,7 +617,7 @@ export default function App() {
     {logoDataUrl ? (
       <img
         src={logoDataUrl}
-        className="mb-6 mr-2 h-[36px] max-w-[320px] object-contain"
+        className="mb-8 mr-2 h-[36px] max-w-[290px] object-contain"
         alt=""
       />
     ) : (
@@ -655,19 +655,19 @@ export default function App() {
                   {form.certTitle}
                 </div>
 
-                <div className="font-header mt-2 text-[30px] font-bold tracking-[0.3em] text-[#2D55BB]">
+                <div className="font-header mt-2 text-[30px] font-bold tracking-[0.2em] text-[#2D55BB]">
                   {form.certSubtitle}
                 </div>
 
                 {/* Presented */}
 
-                <div className="font-header mt-[34px] text-[20px] font-bold uppercase tracking-[0.1em] text-black">
+                <div className="font-header mt-[34px] mb-[6px] text-[20px] font-bold uppercase tracking-[0.1em] text-black">
                   {form.presentedLabel}
                 </div>
 
                 {/* Name */}
 
-                <div className="font-header mt-2.5 max-w-[820px] text-center text-[58px] font-normal uppercase leading-none tracking-wide text-[#2D55BB]">
+                <div className="font-header mt-6  mt-2.5 max-w-[820px] text-center text-[62px] font-normal uppercase leading-none tracking-wide text-[#2D55BB]">
                   {activeName}
                 </div>
 
