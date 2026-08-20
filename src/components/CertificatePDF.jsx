@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     letterSpacing: s(1.55),
     color: "#2D55BB",
     textTransform: "uppercase",
-    marginTop: s(10),
+    marginTop: s(12),
     marginBottom: s(8),
     // no marginBottom here — the preview's name <div> has none either
     // (only mt-6/mt-2.5 → marginTop). An extra marginBottom here was
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     fontFamily: KHMER_FONT,
     fontSize: s(58),
     color: "#2D55BB",
-    marginTop: s(10),
+    marginTop: s(12),
     marginBottom: s(8),
     textAlign: "center",
     lineHeight: 1.35,
