@@ -667,7 +667,7 @@ export default function App() {
 
                 {/* Name */}
 
-                <div className="font-header mt-6  mt-2.5 max-w-[820px] text-center text-[62px] font-normal uppercase leading-none tracking-wide text-[#2D55BB]">
+                <div className="font-header mt-7 mb-5 mt-2.5 max-w-[820px] text-center text-[62px] font-normal uppercase leading-none tracking-wide text-[#2D55BB]">
                   {activeName}
                 </div>
 
