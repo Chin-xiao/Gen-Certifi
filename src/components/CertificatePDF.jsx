@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     fontFamily: SANS_FONT_BOLD,
     fontSize: s(30),
     color: "#4076F0",
-    
+    marginBottom: s(8),
   },
   orgTag: {
     fontFamily: SANS_FONT_BOLD,
@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
     color: "#000000",
     // FIX: preview uses `mt-7` (28px) — this was s(24).
     marginTop: s(28),
+    marginBottom: s(8),
     textAlign: "center",
     maxWidth: s(760),
   },
