@@ -667,14 +667,14 @@ export default function App() {
 
                 {/* Name */}
 
-                <div className="font-header mt-7 mb-5 mt-2.5 max-w-[820px] text-center text-[62px] font-normal uppercase leading-none tracking-wide text-[#2D55BB]">
+                <div className="font-header mt-7 max-w-[820px] text-center text-[62px] font-normal uppercase leading-none tracking-wide text-[#2D55BB]">
                   {activeName}
                 </div>
 
                 {/* Body */}
 
                 <div
-                  className="font-header mt-6 max-w-[760px] text-center text-[24px] leading-[1.8] text-black"
+                  className="font-header mt-7 max-w-[760px] text-center text-[24px] leading-[1.8] text-black"
                   dangerouslySetInnerHTML={{
                     __html: mdBold(
                       form.bodyText.replace(
@@ -696,12 +696,12 @@ export default function App() {
                     organization={form.sig1Org}
                   />
 
-                  <div className="flex items-center justify-center pb-14">
+                  <div className="flex mb-6 items-center justify-center pb-14">
 
                     {badgeImgDataUrl ? (
                       <img
                         src={badgeImgDataUrl}
-                        className="max-h-12 max-w-16 object-contain"
+                        className="max-h-10 max-w-12 object-contain"
                         alt=""
                       />
                     ) : (
