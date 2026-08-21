@@ -5,7 +5,7 @@ import { CertificatePDF, CertificatesPDF } from "./components/CertificatePDF.jsx
 import logo from "./assets/CheckinMe_logo.png";
 import background from "./assets/background.png";
 import signature1 from "./assets/signatureceo.png";
-import signature2 from "./assets/signatureproject.png";
+import signature2 from "./assets/signatureproject (2).png";
 import badge from "./assets/hrgo.png";
 
 const initialRecipients = [];
